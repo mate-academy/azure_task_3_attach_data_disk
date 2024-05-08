@@ -66,7 +66,7 @@ In this task, you need to perform the following steps:
 
         - size: 64 GB 
         - type: Premium SSD 
-        - replication type: LRS 
+        - replication type: LRS
         - No infrastructure redundancy 
 
     2. Attach the data disk to the virtual machine you created in the [previous task](https://github.com/mate-academy/azure_task_2_create_a_vm). When attaching the data disk, make sure that you **set LUN to 42**.
@@ -93,7 +93,7 @@ In this task, you need to perform the following steps:
         ```
             sudo apt install python3-pip
             cd /data/app
-            sudo mv todoapp.service /etc/systemd/system/ 
+            sudo mv todoapp.service /etc/systemd/system/
             sudo systemctl daemon-reload
             sudo systemctl restart todoapp
         ```
