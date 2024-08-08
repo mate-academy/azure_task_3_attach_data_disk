@@ -15,10 +15,10 @@ $artifactsConfigPath = "$PWD/artifacts.json"
 # initial validation
 Write-Output "Running initial validation"
 $context = Get-AzContext  
-if ($context)   
+if ($context)
 {  
     Write-Output "Azure Powershell module is installed, account is connected."  
-} else {  
+} else {
     throw "Please log in to Azure using Azure Powershell module (run Connect-AzAccount)"
 }  
 
@@ -42,7 +42,7 @@ if ($artifactContainer) {
 Write-Output "Generating artifacts"
 
 Write-Output "Checking if temp folder exists"
-if (-not (Test-Path "$tempFolderPath")) { 
+if (-not (Test-Path "$tempFolderPath")) {
     Write-Output "Temp folder does not exist, creating..."
     New-Item -ItemType Directory -Path $tempFolderPath
 }
