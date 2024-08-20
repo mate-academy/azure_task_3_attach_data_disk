@@ -1,1 +1,13 @@
-default
+NAME    HCTL        SIZE MOUNTPOINT
+loop0                87M /snap/lxd/29351
+loop1              63.9M /snap/core20/2318
+loop2              70.2M /snap/powershell/271
+loop3              38.8M /snap/snapd/21759
+sda     0:0:0:0      30G 
+├─sda1             29.9G /
+├─sda14               4M 
+└─sda15             106M /boot/efi
+sdb     0:0:0:1       4G 
+└─sdb1                4G /mnt
+sdc     1:0:0:42     64G /data
+sr0     0:0:0:2    1024M 
