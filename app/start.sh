@@ -1,8 +1,23 @@
-#! /bin/bash 
+#!/bin/bash
 
-echo "Running a system check..."
-lsblk -o NAME,HCTL,SIZE,MOUNTPOINT > /data/app/todolist/static/files/task3.log
+# Переходим в рабочую директорию
+cd /data/app || exit 1
 
-pip install -r requirements.txt
-python3 manage.py migrate
-python3 manage.py runserver 0.0.0.0:8080
+# Абсолютные пути к бинарникам
+PYTHON=/usr/bin/python3
+PIP=/usr/bin/pip
+
+# Установка зависимостей
+$PIP install -r requirements.txt || {
+    echo "Failed to install requirements"
+    exit 1
+}
+
+# Применение миграций
+$PYTHON manage.py migrate || {
+    echo "Failed to apply migrations"
+    exit 1
+}
+
+# Запуск сервера (используем nohup для демонизации)
+exec $PYTHON manage.py runserver 0.0.0.0:8080

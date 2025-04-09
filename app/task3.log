@@ -1,0 +1,11 @@
+NAME    HCTL        SIZE MOUNTPOINT
+loop0              63.7M /snap/core20/2496
+loop1              89.4M /snap/lxd/31333
+loop2              44.4M /snap/snapd/23771
+sda     1:0:0:42     64G /data
+sdb     0:0:0:0      30G 
+├─sdb1             29.9G /
+├─sdb14               4M 
+└─sdb15             106M /boot/efi
+sdc     0:0:0:1       4G 
+└─sdc1                4G /mnt
