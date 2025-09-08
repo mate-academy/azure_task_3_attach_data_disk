@@ -113,3 +113,34 @@ Here is how to complete tasks in this module:
 6. When all tests will pass — commit your changes and submit the solution for review. 
 
 Pro tip: If you are stuck with any of the implementation steps, run `scripts/generate-artifacts.ps1` and `scripts/validate-artifacts.ps1`. The validation script might give you a hint on what to do.  
+
+
+
+PS F:\Azure\azure_task_3_attach_data_disk> scripts/validate-artifacts.ps1
+Reading config
+Checking if temp folder exists
+Downloading artifacts
+Validating artifacts
+✅ Checked if Virtual Machine exists - OK.
+✅ Checked Virtual Machine location - OK.
+✅ Checked Virtual Machine availability zone - OK.
+✅ Checked Virtual Machine security type settings - OK.
+✅ Checked Virtual Machine OS image publisher - OK
+✅ Checked Virtual Machine OS image offer - OK
+✅ Checked Virtual Machine size - OK
+✅ Checked Virtual Machine OS user authentification settings - OK
+✅ Checked if the Public IP resource exists - OK
+✅ Checked Public IP DNS label - OK
+✅ Checked if the Network Interface resource exists - OK
+✅ Checked if Public IP assigned to the VM - OK
+✅ Checked if the Network Security Group resource exists - OK
+✅ Checked if NSG has SSH network security rule configured - OK
+✅ Checked if NSG has HTTP network security rule configured - OK
+✅ Checked if data disk is attached to VM - OK
+✅ Checked if data disk has a proper LUN - OK
+✅ Checked disk size - OK
+✅ Checked if premium disk is used - OK
+✅ Checked if the web application is running - OK                                                                           
+✅ Checked if the disk is mounted to the VM - OK
+
+🥳 Congratulations! All tests passed!
