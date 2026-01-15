@@ -1,0 +1,4 @@
+{
+  "resourcesTemplate": "https://whatislavx.blob.core.windows.net/task-artifacts/task3/exported-template.json?sv=2025-07-05&se=2026-02-14T22%3A43%3A35Z&sr=b&sp=r&sig=1g6ncld2mH%2F4pjbKyG7iYb97Baj76FKoa3oqx%2FmAG0U%3D",
+  "explanation": "ВМ була розгорнута у France Central замість UK South, оскільки моя підписка не підтримує ресурси у регіоні UK South."
+}
