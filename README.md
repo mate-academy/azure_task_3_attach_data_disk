@@ -39,12 +39,12 @@ In this task, you need to perform the following steps:
 
 1. Create and attach a data disk:
 
-    1. Use the infrastructure you created in the [previous task](https://github.com/mate-academy/azure_task_2_create_a_vm). In the `mate-azure-task-2`, create a new managed disk, which meets the following requirements: 
+    1. Use the infrastructure you created in the [previous task](https://github.com/mate-academy/azure_task_2_create_a_vm). In the `mate-azure-task-2`, create a new managed disk, which meets the following requirements:
 
-        - size: 64 GB 
-        - type: Premium SSD 
-        - replication type: LRS 
-        - No infrastructure redundancy 
+        - size: 64 GB
+        - type: Premium SSD
+        - replication type: LRS
+        - No infrastructure redundancy
 
     2. Attach the data disk to the virtual machine you created in the [previous task](https://github.com/mate-academy/azure_task_2_create_a_vm). When attaching the data disk, make sure that you **set LUN to 42**.
 
@@ -52,10 +52,10 @@ In this task, you need to perform the following steps:
 
 2. Deploy the **new version**  of the web application to the virtual machine
     
-    1. Connect to the VM using SSH, create a folder `/data/app`, and configure your user as an owned of the folder: 
+    1. Connect to the VM using SSH, create a folder `/data/app`, and configure your user as an owned of the folder:
         ```
             ssh <your-vm-username>@<your-public-ip-DNS-name>
-            sudo mkdir /data/app 
+            sudo mkdir /data/app
             sudo chown <your-vm-username>:<your-vm-username> /data/app
         ```
 
@@ -70,7 +70,7 @@ In this task, you need to perform the following steps:
         ```
             sudo apt install python3-pip
             cd /data/app
-            sudo mv todoapp.service /etc/systemd/system/ 
+            sudo mv todoapp.service /etc/systemd/system/
             sudo systemctl daemon-reload
             sudo systemctl restart todoapp
         ```
