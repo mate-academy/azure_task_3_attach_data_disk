@@ -1,5 +1,4 @@
-# Attach Data Disk to The Azure Virtual Machine
-
+# Attach Data Disk to The Azure Virtual Machin
 Storing the web application on the OS disk might not be the best idea. Imagine that you need to set up a disk backup for your web app: if you are using the OS disk to store the web app, disk backup would include both the application and the operating system. Such backups would consume a lot of storage space, and it would be hard to restore them. The best practice is to segregate the OS and the application by using separate data disks for your application and application data. This way, you get better control over the resources allocated for your application and for its performance. 
 
 In this task, you will practice working with data disks for Azure Virtual Machines and deploy a new version of the web application to a separate data disk. 
