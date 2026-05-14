@@ -1,3 +1,6 @@
 {
-  "resourcesTemplate": ""
+  "resourcesTemplate": "https://formateacademytask2.blob.core.windows.net/task-artifacts/task3/exported-template.json?sv=2025-07-05&se=2026-06-13T12%3A14%3A07Z&sr=b&sp=r&sig=CEYDIh5lNjwwpxvujW2Wp4UvvMdAC2hlo%2FTmA5SApvk%3D",
+  "resourcesTemplateDisk": "https://formateacademytask2.blob.core.windows.net/task-artifacts/task3/exported-template.json?sv=2025-07-05&se=2026-06-13T12%3A14%3A07Z&sr=b&sp=r&sig=CEYDIh5lNjwwpxvujW2Wp4UvvMdAC2hlo%2FTmA5SApvk%3D",
+  "resourcesTemplateConfigs": "https://formateacademytask2.blob.core.windows.net/task-artifacts/task3/exported-template.json?sv=2025-07-05&se=2026-06-13T12%3A14%3A07Z&sr=b&sp=r&sig=CEYDIh5lNjwwpxvujW2Wp4UvvMdAC2hlo%2FTmA5SApvk%3D"
 }
+
