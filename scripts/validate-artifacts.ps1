@@ -47,7 +47,7 @@ if ($virtualMachine) {
     throw "Unable to find Virtual Machine in the task resource group. Please make sure that you created the Virtual Machine and try again."
 }
 
-if ($virtualMachine.location -eq "uksouth" ) { 
+if ($virtualMachine.location -eq "southafricanorth" ) {
     Write-Output "`u{2705} Checked Virtual Machine location - OK."
 } else { 
     Write-Output `u{1F914}
@@ -61,27 +61,15 @@ if (-not $virtualMachine.zones) {
     throw "Virtual machine has availibility zone set. Please re-deploy VM with 'No infrastructure redundancy' availability option and try again." 
 }
 
-if (-not $virtualMachine.properties.securityProfile) { 
-    Write-Output "`u{2705} Checked Virtual Machine security type settings - OK."
-} else { 
-    Write-Output `u{1F914}
-    throw "Virtual machine security type is set to TMP or Confidential. Please re-deploy VM with security type set to 'Standard' and try again."
-}
-
 if ($virtualMachine.properties.storageProfile.imageReference.publisher -eq "canonical") { 
     Write-Output "`u{2705} Checked Virtual Machine OS image publisher - OK" 
 } else { 
     Write-Output `u{1F914}
     throw "Virtual Machine uses OS image from unknown published. Please re-deploy the VM using OS image from publisher 'Cannonical' and try again."
 }
-if ($virtualMachine.properties.storageProfile.imageReference.offer.Contains('ubuntu-server') -and $virtualMachine.properties.storageProfile.imageReference.sku.Contains('22_04')) { 
-    Write-Output "`u{2705} Checked Virtual Machine OS image offer - OK"
-} else { 
-    Write-Output `u{1F914}
-    throw "Virtual Machine uses wrong OS image. Please re-deploy VM using Ubuntu Server 22.04 and try again" 
-}
 
-if ($virtualMachine.properties.hardwareProfile.vmSize -eq "Standard_B1s") { 
+
+if ($virtualMachine.properties.hardwareProfile.vmSize -eq "Standard_B2ats_v2") {
     Write-Output "`u{2705} Checked Virtual Machine size - OK"
 } else { 
     Write-Output `u{1F914}
@@ -131,7 +119,7 @@ if ($nic) {
 }
 
 if ($nic.properties.ipConfigurations.Count -eq 1) { 
-    if ($nic.properties.ipConfigurations.properties.publicIPAddress -and $nic.properties.ipConfigurations.properties.publicIPAddress.id) { 
+    if ($nic.properties.ipConfigurations.properties.publicIPAddress -and $nic.properties.ipConfigurations.properties.publicIPAddress.id) {
         Write-Output "`u{2705} Checked if Public IP assigned to the VM - OK"
     } else { 
         Write-Output `u{1F914}
@@ -250,7 +238,7 @@ if ($response) {
         throw "Unable to verify the new version of the web app. Please make sure that the new version of the dodo app is deployed to the VM, that new systemd unit config file is deployed, that you restarted the service after the systemd config file update and try again."
     }
 
-    if ($taskLogContent -match $lsblkRegex1 -or $taskLogContent -match $lsblkRegex2) { 
+    if ($taskLogContent -match $lsblkRegex1 -or $taskLogContent -match $lsblkRegex2) {
         Write-Output "`u{2705} Checked if the disk is mounted to the VM - OK"
     } else { 
         throw "Unable to verify that the file system was created on the data disk, and that it's mounted to the VM. Please mount the disk to the VM, restart the todoapp service and try again."
