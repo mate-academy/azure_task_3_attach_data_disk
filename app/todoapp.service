@@ -4,6 +4,8 @@ Description=todoapp service
 [Service]
 WorkingDirectory=/data/app
 ExecStart=/data/app/start.sh
+Environment="VIRTUAL_ENV=/data/app/venv"
+Environment="PATH=/data/app/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 StandardOutput=syslog
 StandardError=syslog
 
