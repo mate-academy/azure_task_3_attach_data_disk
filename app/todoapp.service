@@ -1,5 +1,7 @@
 [Unit]
 Description=todoapp service
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 WorkingDirectory=/data/app
@@ -8,6 +10,7 @@ Environment="VIRTUAL_ENV=/data/app/venv"
 Environment="PATH=/data/app/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 StandardOutput=syslog
 StandardError=syslog
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

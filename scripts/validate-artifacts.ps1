@@ -213,7 +213,7 @@ if ($dataDisk.lun -eq 10) {
     Write-Output "`u{2705} Checked if data disk has a proper LUN - OK"
 }
 else { 
-    throw "Unable to verify data disk LUN. Expected - 10, got - $($dataDisk.lun). Please delete the virtual machine and create it again or follow the documentation for deataching data disk: https://learn.microsoft.com/en-us/powershell/module/az.compute/remove-azvmdatadisk?view=azps-11.4.0. After that, attach data disk to the VM using lun '42' and try again. "
+    throw "Unable to verify data disk LUN. Expected - 10, got - $($dataDisk.lun). Please delete the virtual machine and create it again or follow the documentation for detaching data disk: https://learn.microsoft.com/en-us/powershell/module/az.compute/remove-azvmdatadisk?view=azps-11.4.0. After that, attach data disk to the VM using LUN '10' and try again. "
 }
 if ($dataDisk.diskSizeGB -eq 64) { 
     Write-Output "`u{2705} Checked disk size - OK"
@@ -237,7 +237,7 @@ else {
 # loop0              63.9M /snap/core20/2182
 # loop1                87M /snap/lxd/27428
 # loop2              39.1M /snap/snapd/21184
-# sda     1:0:0:10     64G        <--- that the first of 2 lines we are looking for, it proves that disk with LUN 42 is mounted
+# sda     1:0:0:10     64G        <--- that the first of 2 lines we are looking for, it proves that disk with LUN 10 is mounted
 # └─sda1               64G /data           
 # sdb     0:0:0:0      30G 
 # ├─sdb1             29.9G /
@@ -252,7 +252,7 @@ else {
 # loop0              63.9M /snap/core20/2182
 # loop1                87M /snap/lxd/27428
 # loop2              39.1M /snap/snapd/21184
-# sda     1:0:0:10     64G /data                <--- that the line we are looking for, it proves that disk with LUN 42 is mounted
+# sda     1:0:0:10     64G /data                <--- that the line we are looking for, it proves that disk with LUN 10 is mounted
 # └─sda1               64G 
 # sdb     0:0:0:0      30G 
 # ├─sdb1             29.9G /
