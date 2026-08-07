@@ -46,9 +46,9 @@ In this task, you need to perform the following steps:
         - replication type: LRS 
         - No infrastructure redundancy 
 
-    2. Attach the data disk to the virtual machine you created in the [previous task](https://github.com/mate-academy/azure_task_2_create_a_vm). When attaching the data disk, make sure that you **set LUN to 10**. You can provision and attach it with `scripts/provision-data-disk.ps1`.
+    2. Attach the data disk to the virtual machine you created in the [previous task](https://github.com/mate-academy/azure_task_2_create_a_vm). When attaching the data disk, make sure that you **set LUN to 42**. You can provision and attach it with `scripts/provision-data-disk.ps1`.
 
-    3. Run `scripts/mount-data-disk.sh` on the VM as root. It creates an ext4 filesystem on the LUN 10 disk, mounts it at `/data`, adds a UUID-based `/etc/fstab` entry, creates `/data/app`, and assigns it to the SSH user.
+    3. Run `scripts/mount-data-disk.sh` on the VM as root. It creates an ext4 filesystem on the LUN 42 disk, mounts it at `/data`, adds a UUID-based `/etc/fstab` entry, creates `/data/app`, and assigns it to the SSH user.
 
     The provisioning script can be run from the repository with Azure PowerShell 7:
 

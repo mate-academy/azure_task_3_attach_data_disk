@@ -2,13 +2,13 @@
 
 set -euo pipefail
 
-DATA_DISK=/dev/disk/azure/scsi1/lun10
+DATA_DISK=/dev/disk/azure/scsi1/lun42
 MOUNT_POINT=/data
 APP_DIR=/data/app
 APP_USER="${1:-${SUDO_USER:-}}"
 
 if [[ ! -e "$DATA_DISK" ]]; then
-    echo "Data disk for LUN 10 was not found at $DATA_DISK" >&2
+    echo "Data disk for LUN 42 was not found at $DATA_DISK" >&2
     exit 1
 fi
 

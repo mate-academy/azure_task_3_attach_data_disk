@@ -209,11 +209,11 @@ else {
 }
 
 $dataDisk = $virtualMachine.properties.storageProfile.dataDisks[0]
-if ($dataDisk.lun -eq 10) {
+if ($dataDisk.lun -eq 42) {
     Write-Output "`u{2705} Checked if data disk has a proper LUN - OK"
 }
 else { 
-    throw "Unable to verify data disk LUN. Expected - 10, got - $($dataDisk.lun). Please delete the virtual machine and create it again or follow the documentation for detaching data disk: https://learn.microsoft.com/en-us/powershell/module/az.compute/remove-azvmdatadisk?view=azps-11.4.0. After that, attach data disk to the VM using LUN '10' and try again. "
+    throw "Unable to verify data disk LUN. Expected - 42, got - $($dataDisk.lun). Please delete the virtual machine and create it again or follow the documentation for detaching data disk: https://learn.microsoft.com/en-us/powershell/module/az.compute/remove-azvmdatadisk?view=azps-11.4.0. After that, attach data disk to the VM using LUN '42' and try again. "
 }
 if ($dataDisk.diskSizeGB -eq 64) { 
     Write-Output "`u{2705} Checked disk size - OK"
@@ -237,7 +237,7 @@ else {
 # loop0              63.9M /snap/core20/2182
 # loop1                87M /snap/lxd/27428
 # loop2              39.1M /snap/snapd/21184
-# sda     1:0:0:10     64G        <--- that the first of 2 lines we are looking for, it proves that disk with LUN 10 is mounted
+# sda     1:0:0:42     64G        <--- that the first of 2 lines we are looking for, it proves that disk with LUN 42 is mounted
 # └─sda1               64G /data           
 # sdb     0:0:0:0      30G 
 # ├─sdb1             29.9G /
@@ -252,7 +252,7 @@ else {
 # loop0              63.9M /snap/core20/2182
 # loop1                87M /snap/lxd/27428
 # loop2              39.1M /snap/snapd/21184
-# sda     1:0:0:10     64G /data                <--- that the line we are looking for, it proves that disk with LUN 10 is mounted
+# sda     1:0:0:42     64G /data                <--- that the line we are looking for, it proves that disk with LUN 42 is mounted
 # └─sda1               64G 
 # sdb     0:0:0:0      30G 
 # ├─sdb1             29.9G /
@@ -263,8 +263,8 @@ else {
 # 
 # To find 2 lines (for the first possible solution) and 1 line (for the second possible solution), we will 
 # use regular expressions bellow. Feel free to test how they work using an online tool: https://regexr.com/
-$lsblkRegex1 = '[a-z]{3}[ ]{1,}\d:\d:\d:10[ ]{1,}64G[ ]{1,}\n└─[a-z]{3}\d[ ]{1,}64G[ ]{1,}\/data'
-$lsblkRegex2 = '[a-z]{3}[ ]{1,}\d:\d:\d:10[ ]{1,}64G[ ]{1,}\/data'
+$lsblkRegex1 = '[a-z]{3}[ ]{1,}\d:\d:\d:42[ ]{1,}64G[ ]{1,}\n└─[a-z]{3}\d[ ]{1,}64G[ ]{1,}\/data'
+$lsblkRegex2 = '[a-z]{3}[ ]{1,}\d:\d:\d:42[ ]{1,}64G[ ]{1,}\/data'
 $response = (Invoke-WebRequest -Uri "http://$($pip.properties.dnsSettings.fqdn):8080/static/files/task3.log" -ErrorAction SilentlyContinue -SkipHttpErrorCheck) 
 if ($response) { 
     Write-Output "`u{2705} Checked if the web application is running - OK"

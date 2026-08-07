@@ -14,6 +14,11 @@ if [ ! -w /data/app/todolist/static/files ]; then
     exit 1
 fi
 
+if [ ! -f /data/app/manage.py ] || [ ! -f /data/app/requirements.txt ]; then
+    echo "/data/app is missing manage.py or requirements.txt; deploy the app before starting todoapp" >&2
+    exit 1
+fi
+
 lsblk -o NAME,HCTL,SIZE,MOUNTPOINT > /data/app/todolist/static/files/task3.log
 
 VENV_PATH=/data/app/venv
@@ -26,6 +31,6 @@ if [ ! -x "$VENV_PATH/bin/python" ]; then
     python3 -m venv "$VENV_PATH"
 fi
 
-"$VENV_PATH/bin/pip" install -r /data/app/requirements.txt
+"$VENV_PATH/bin/python" -m pip install -r /data/app/requirements.txt
 "$VENV_PATH/bin/python" /data/app/manage.py migrate
-exec "$VENV_PATH/bin/python" /data/app/manage.py runserver 0.0.0.0:8080
+exec "$VENV_PATH/bin/python" /data/app/manage.py runserver 0.0.0.0:8080 --noreload

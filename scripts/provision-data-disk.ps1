@@ -3,7 +3,7 @@ param(
     [string]$VmName,
     [string]$DiskName = "task3-data-disk",
     [int]$DiskSizeGB = 64,
-    [int]$Lun = 10
+    [int]$Lun = 42
 )
 
 $ErrorActionPreference = "Stop"
@@ -12,8 +12,8 @@ if ($DiskSizeGB -ne 64) {
     throw "This task requires a 64 GB data disk."
 }
 
-if ($Lun -ne 10) {
-    throw "This task requires data disk LUN 10."
+if ($Lun -ne 42) {
+    throw "This task requires data disk LUN 42."
 }
 
 $vms = if ($VmName) {
