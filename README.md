@@ -46,9 +46,26 @@ In this task, you need to perform the following steps:
         - replication type: LRS 
         - No infrastructure redundancy 
 
-    2. Attach the data disk to the virtual machine you created in the [previous task](https://github.com/mate-academy/azure_task_2_create_a_vm). When attaching the data disk, make sure that you **set LUN to 42**.
+    2. Attach the data disk to the virtual machine you created in the [previous task](https://github.com/mate-academy/azure_task_2_create_a_vm). When attaching the data disk, make sure that you **set LUN to 42**. You can provision and attach it with `scripts/provision-data-disk.ps1`.
 
-    3. Follow the [documentation](https://learn.microsoft.com/en-us/azure/virtual-machines/linux/attach-disk-portal?tabs=ubuntu#connect-to-the-linux-vm-to-mount-the-new-disk) to create the file system and mount the disk to the virtual machine. Mount disk to the folder `/data`.
+    3. Run `scripts/mount-data-disk.sh` on the VM as root. It creates an ext4 filesystem on the LUN 42 disk, mounts it at `/data`, adds a UUID-based `/etc/fstab` entry, creates `/data/app`, and assigns it to the SSH user.
+
+    The provisioning script can be run from the repository with Azure PowerShell 7:
+
+    ```powershell
+    ./scripts/provision-data-disk.ps1 `
+      -ResourceGroupName mate-azure-task-2 `
+      -VmName <your-vm-name> `
+      -DiskName task3-data-disk
+    ```
+
+    Copy and run the mount script on the VM. The argument is the VM SSH username:
+
+    ```bash
+    scp scripts/mount-data-disk.sh <your-vm-username>@<your-public-ip-DNS-name>:/tmp/
+    ssh <your-vm-username>@<your-public-ip-DNS-name> \
+      'sudo bash /tmp/mount-data-disk.sh <your-vm-username>'
+    ```
 
 2. Deploy the **new version**  of the web application to the virtual machine
     
@@ -68,18 +85,20 @@ In this task, you need to perform the following steps:
     3. Connect to the virtual machine again using SSH, install pre-requirements, and configure a service for the application
         
         ```
-            sudo apt install python3-pip
+            sudo apt install python3-pip python3-venv
             cd /data/app
             sudo mv todoapp.service /etc/systemd/system/ 
             sudo systemctl daemon-reload
-            sudo systemctl restart todoapp
+            sudo systemctl enable --now todoapp
         ```
     
     4. Verify that the web app service is running. For that, run the following command on the VM: 
         
         ```
-            systemctl status todoapp
+        systemctl status todoapp
         ```
+
+        The unit starts `/data/app/start.sh`. The script refuses to start unless `/data` is mounted and the static log directory is writable, creates `/data/app/venv` when needed, installs requirements into that venv, and runs Django from the venv.
 
 3. Verify that the web application is running; for that, open in a web browser the following URL: `http://<your-public-ip-DNS-name>:8080`. You should see the main page of the todo app. 
 
