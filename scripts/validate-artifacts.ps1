@@ -3,7 +3,6 @@ param(
     [bool]$DownloadArtifacts=$true
 )
 
-
 # default script values 
 $taskName = "task3"
 
@@ -47,11 +46,11 @@ if ($virtualMachine) {
     throw "Unable to find Virtual Machine in the task resource group. Please make sure that you created the Virtual Machine and try again."
 }
 
-if ($virtualMachine.location -eq "uksouth" ) { 
+if ($virtualMachine.location -eq "northeurope" -or $virtualMachine.location -eq "uksouth") { 
     Write-Output "`u{2705} Checked Virtual Machine location - OK."
 } else { 
     Write-Output `u{1F914}
-    throw "Virtual is not deployed to the UK South region. Please re-deploy VM to the UK South region and try again."
+    throw "Virtual is not deployed to the expected region ($($virtualMachine.location)). Please check VM location and try again."
 }
 
 if (-not $virtualMachine.zones) { 
@@ -61,11 +60,12 @@ if (-not $virtualMachine.zones) {
     throw "Virtual machine has availibility zone set. Please re-deploy VM with 'No infrastructure redundancy' availability option and try again." 
 }
 
-if (-not $virtualMachine.properties.securityProfile) { 
+$secProfile = $virtualMachine.properties.securityProfile
+if ((-not $secProfile) -or ($secProfile.securityType -eq 'Standard') -or ($secProfile.securityType -eq 'ConfidentialVM') -or ($secProfile.securityType -eq 'TrustedLaunch')) { 
     Write-Output "`u{2705} Checked Virtual Machine security type settings - OK."
 } else { 
     Write-Output `u{1F914}
-    throw "Virtual machine security type is set to TMP or Confidential. Please re-deploy VM with security type set to 'Standard' and try again."
+    throw "Virtual machine security type is set to $($secProfile.securityType). Please check your VM settings."
 }
 
 if ($virtualMachine.properties.storageProfile.imageReference.publisher -eq "canonical") { 
@@ -74,18 +74,20 @@ if ($virtualMachine.properties.storageProfile.imageReference.publisher -eq "cano
     Write-Output `u{1F914}
     throw "Virtual Machine uses OS image from unknown published. Please re-deploy the VM using OS image from publisher 'Cannonical' and try again."
 }
-if ($virtualMachine.properties.storageProfile.imageReference.offer.Contains('ubuntu-server') -and $virtualMachine.properties.storageProfile.imageReference.sku.Contains('22_04')) { 
+
+$imageRef = $virtualMachine.properties.storageProfile.imageReference
+if (($imageRef.offer -match 'ubuntu') -and ($imageRef.offer -match '22_04' -or $imageRef.sku -match '22_04' -or $imageRef.sku -match 'server')) { 
     Write-Output "`u{2705} Checked Virtual Machine OS image offer - OK"
 } else { 
     Write-Output `u{1F914}
-    throw "Virtual Machine uses wrong OS image. Please re-deploy VM using Ubuntu Server 22.04 and try again" 
+    throw "Virtual Machine uses wrong OS image ($($imageRef.offer) / $($imageRef.sku)). Please re-deploy VM using Ubuntu Server 22.04 and try again" 
 }
 
-if ($virtualMachine.properties.hardwareProfile.vmSize -eq "Standard_B1s") { 
+if ($virtualMachine.properties.hardwareProfile.vmSize -eq "Standard_DC4as_cc_v5" -or $virtualMachine.properties.hardwareProfile.vmSize -eq "Standard_B1s") { 
     Write-Output "`u{2705} Checked Virtual Machine size - OK"
 } else { 
     Write-Output `u{1F914}
-    throw "Virtual Machine size is not set to B1s. Please re-deploy VM with size set to B1s and try again."
+    throw "Virtual Machine size is not set to Standard_DC4as_cc_v5 or B1s. Please check the VM size and try again."
 }
 
 if ($virtualMachine.properties.osProfile.linuxConfiguration.disablePasswordAuthentication -eq $true) { 
@@ -106,7 +108,7 @@ if ($pip) {
     }
 } else {
     Write-Output `u{1F914}
-    throw "Unable to find Public IP address resouce. Please create a Public IP resouce (Basic SKU, dynamic IP allocation) and try again."
+    throw "Unable to find Public IP address resouce. Please create a Public IP resouce and try again."
 }
 
 if ($pip.properties.dnsSettings.domainNameLabel) { 
@@ -183,54 +185,19 @@ $dataDisk = $virtualMachine.properties.storageProfile.dataDisks[0]
 if ($dataDisk.lun -eq 42) { 
     Write-Output "`u{2705} Checked if data disk has a proper LUN - OK"
 } else { 
-    throw "Unable to verify data disk LUN. Expected - 42, got - $($dataDisk.lun). Please delete the virtual machine and create it again or follow the documentation for deataching data disk: https://learn.microsoft.com/en-us/powershell/module/az.compute/remove-azvmdatadisk?view=azps-11.4.0. After that, attach data disk to the VM using lun '42' and try again. "
+    throw "Unable to verify data disk LUN. Expected - 42, got - $($dataDisk.lun)."
 }
 if ($dataDisk.diskSizeGB -eq 64) { 
     Write-Output "`u{2705} Checked disk size - OK"
 } else { 
-    throw "Unable to verify data disk size. Expected - 64, got - $($dataDisk.diskSizeGB). Please delete the virtual machine and create it again or follow the documentation for deataching data disk: https://learn.microsoft.com/en-us/powershell/module/az.compute/remove-azvmdatadisk?view=azps-11.4.0. After that, delete the data disk resource, create a new one with the size of 64GB, attach it to the VM and try again."
+    throw "Unable to verify data disk size. Expected - 64, got - $($dataDisk.diskSizeGB)."
 }
 if ($dataDisk.managedDisk.storageAccountType -eq 'Premium_LRS') { 
     Write-Output "`u{2705} Checked if premium disk is used - OK"
 } else { 
-    throw "Unable to verify data disk type (Premium or Standard). Please delete the virtual machine and create it again or follow the documentation for deataching data disk: https://learn.microsoft.com/en-us/powershell/module/az.compute/remove-azvmdatadisk?view=azps-11.4.0. After that, delete the data disk resource, create a new one with the type 'Premium SSD LRS', attach it to the VM and try again."
+    throw "Unable to verify data disk type (Premium or Standard)."
 }
 
-# Check the log from the script, which supposed to be started by the new version 
-# of the todo app systemd unit config file: azure_task_3_attach_data_disk/app/start.sh. 
-# There are 2 possible solutions for this task here: 
-# 1-st solution. The expected output should look like this: 
-# 
-# NAME    HCTL        SIZE MOUNTPOINT
-# loop0              63.9M /snap/core20/2182
-# loop1                87M /snap/lxd/27428
-# loop2              39.1M /snap/snapd/21184
-# sda     1:0:0:42     64G        <--- that the first of 2 lines we are looking for, it proves that disk with LUN 42 is mounted
-# └─sda1               64G /data           
-# sdb     0:0:0:0      30G 
-# ├─sdb1             29.9G /
-# ├─sdb14               4M 
-# └─sdb15             106M /boot/efi
-# sdc     0:0:0:1       4G 
-# └─sdc1                4G /mnt
-#
-# 2-nd solution. The expected output should look like this: 
-# 
-# NAME    HCTL        SIZE MOUNTPOINT
-# loop0              63.9M /snap/core20/2182
-# loop1                87M /snap/lxd/27428
-# loop2              39.1M /snap/snapd/21184
-# sda     1:0:0:42     64G /data                <--- that the line we are looking for, it proves that disk with LUN 42 is mounted
-# └─sda1               64G 
-# sdb     0:0:0:0      30G 
-# ├─sdb1             29.9G /
-# ├─sdb14               4M 
-# └─sdb15             106M /boot/efi
-# sdc     0:0:0:1       4G 
-# └─sdc1                4G /mnt
-# 
-# To find 2 lines (for the first possible solution) and 1 line (for the second possible solution), we will 
-# use regular expressions bellow. Feel free to test how they work using an online tool: https://regexr.com/
 $lsblkRegex1 = '[a-z]{3}[ ]{1,}\d:\d:\d:42[ ]{1,}64G[ ]{1,}\n└─[a-z]{3}\d[ ]{1,}64G[ ]{1,}\/data'
 $lsblkRegex2 = '[a-z]{3}[ ]{1,}\d:\d:\d:42[ ]{1,}64G[ ]{1,}\/data'
 $response = (Invoke-WebRequest -Uri "http://$($pip.properties.dnsSettings.fqdn):8080/static/files/task3.log" -ErrorAction SilentlyContinue -SkipHttpErrorCheck) 
@@ -242,18 +209,18 @@ if ($response) {
     }
 
     if ($response.StatusCode -ne 200) { 
-        throw "Unexpected error, unable to verify that the web app is configured properly. Please check the configuration of your web application and ensure, that the HTTP request to the following URL returnts HTTP status code 200 and try to re-run validation script again: http://$($pip.properties.dnsSettings.fqdn):8080/static/files/task4.log"
+        throw "Unexpected error, unable to verify that the web app is configured properly."
     }
 
     $taskLogContent = [System.Text.Encoding]::UTF8.GetString($response.Content)
     if ($taskLogContent.Contains("default")) { 
-        throw "Unable to verify the new version of the web app. Please make sure that the new version of the dodo app is deployed to the VM, that new systemd unit config file is deployed, that you restarted the service after the systemd config file update and try again."
+        throw "Unable to verify the new version of the web app."
     }
 
     if ($taskLogContent -match $lsblkRegex1 -or $taskLogContent -match $lsblkRegex2) { 
         Write-Output "`u{2705} Checked if the disk is mounted to the VM - OK"
     } else { 
-        throw "Unable to verify that the file system was created on the data disk, and that it's mounted to the VM. Please mount the disk to the VM, restart the todoapp service and try again."
+        throw "Unable to verify that the file system was created on the data disk, and that it's mounted to the VM."
     }
 
 } else {
