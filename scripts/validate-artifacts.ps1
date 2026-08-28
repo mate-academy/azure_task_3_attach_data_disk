@@ -47,7 +47,7 @@ if ($virtualMachine) {
     throw "Unable to find Virtual Machine in the task resource group. Please make sure that you created the Virtual Machine and try again."
 }
 
-if ($virtualMachine.location -eq "uksouth" ) { 
+if ($virtualMachine.location -eq "denmarkeast" ) {
     Write-Output "`u{2705} Checked Virtual Machine location - OK."
 } else { 
     Write-Output `u{1F914}
@@ -70,7 +70,7 @@ if (-not $virtualMachine.properties.securityProfile) {
 
 if ($virtualMachine.properties.storageProfile.imageReference.publisher -eq "canonical") { 
     Write-Output "`u{2705} Checked Virtual Machine OS image publisher - OK" 
-} else { 
+} else {
     Write-Output `u{1F914}
     throw "Virtual Machine uses OS image from unknown published. Please re-deploy the VM using OS image from publisher 'Cannonical' and try again."
 }
