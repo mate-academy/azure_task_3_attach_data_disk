@@ -24,3 +24,7 @@ Validating artifacts
 ✅ Checked if the disk is mounted to the VM - OK
 
 🥳 Congratulations! All tests passed!
+
+Final cleanup verification:
+VM task2-vm state: VM deallocated
+VM was deallocated after validate-artifacts.ps1 passed all checks.
