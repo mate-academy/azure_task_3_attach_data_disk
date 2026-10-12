@@ -1,0 +1,26 @@
+Reading config
+Checking if temp folder exists
+Downloading artifacts
+Validating artifacts
+✅ Checked if Virtual Machine exists - OK.
+✅ Checked Virtual Machine availability zone - OK.
+✅ Checked Virtual Machine security type settings - OK.
+✅ Checked Virtual Machine OS image publisher - OK
+✅ Checked Virtual Machine OS image offer - OK
+✅ Checked Virtual Machine size - OK
+✅ Checked Virtual Machine OS user authentification settings - OK
+✅ Checked if the Public IP resource exists - OK
+✅ Checked Public IP DNS label - OK
+✅ Checked if the Network Interface resource exists - OK
+✅ Checked if Public IP assigned to the VM - OK
+✅ Checked if the Network Security Group resource exists - OK
+✅ Checked if NSG has SSH network security rule configured - OK
+✅ Checked if NSG has HTTP network security rule configured - OK
+✅ Checked if data disk is attached to VM - OK
+✅ Checked if data disk has a proper LUN - OK
+✅ Checked disk size - OK
+✅ Checked if premium disk is used - OK
+✅ Checked if the web application is running - OK
+✅ Checked if the disk is mounted to the VM - OK
+
+🥳 Congratulations! All tests passed!
