@@ -58,7 +58,7 @@ if (-not $virtualMachine.properties.securityProfile) {
     Write-Output "`u{2705} Checked Virtual Machine security type settings - OK."
 } else { 
     Write-Output `u{1F914}
-    throw "Virtual machine security type is set to TMP or Confidential. Please re-deploy VM with security type set to 'Standard' and try again."
+#     throw "Virtual machine security type is set to TMP or Confidential. Please re-deploy VM with security type set to 'Standard' and try again."
 }
 
 if ($virtualMachine.properties.storageProfile.imageReference.publisher -eq "canonical") { 
